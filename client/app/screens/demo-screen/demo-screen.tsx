@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
+import { Alert, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { BulletItem, Button, Header, Text, Screen, Wallpaper } from "../../components"
@@ -77,13 +77,91 @@ const HINT: TextStyle = {
   marginVertical: spacing[2],
 }
 
+const ouraRingJsonData = `{
+  "summary_date": "2017-11-05",
+  "period_id": 0,
+  "is_longest": 1,
+  "timezone": 120,
+  "bedtime_start": "2017-11-06T02:13:19+02:00",
+  "bedtime_end": "2017-11-06T08:12:19+02:00",
+  "score": 70,
+  "score_total": 57,
+  "score_disturbances": 83,
+  "score_efficiency": 99,
+  "score_latency": 88,
+  "score_rem": 97,
+  "score_deep": 59,
+  "score_alignment": 31,
+  "total": 20310,
+  "duration": 21540,
+  "awake": 1230,
+  "light": 10260,
+  "rem": 7140,
+  "deep": 2910,
+  "onset_latency": 480,
+  "restless": 39,
+  "efficiency": 94,
+  "midpoint_time": 11010,
+  "hr_lowest": 49,
+  "hr_average": 56.375,
+  "rmssd": 54,
+  "breath_average": 13,
+  "temperature_delta": -0.06,
+  "hypnogram_5min": "443432222211222333321112222222222111133333322221112233333333332232222334",
+  "hr_5min": [0, 53, 51, 0, 50, 50, 49, 49, 50, 50, 51, 52, 52, 51, 53, 58, 60, 60, 59, 58, 58, 58, 58, 55, 55, 55, 55, 56, 56, 55, 53, 53, 53, 53, 53, 53, 57, 58, 60, 60, 59, 57, 59, 58, 56, 56, 56, 56, 55, 55, 56, 56, 57, 58, 55, 56, 57, 60, 58, 58, 59, 57, 54, 54, 53, 52, 52, 55, 53, 54, 56, 0],
+  "rmssd_5min": [0, 0, 62, 0, 75, 52, 56, 56, 64, 57, 55, 78, 77, 83, 70, 35, 21, 25, 49, 44, 48, 48, 62, 69, 66, 64, 79, 59, 67, 66, 70, 63, 53, 57, 53, 57, 38, 26, 18, 24, 30, 35, 36, 46, 53, 59, 50, 50, 53, 53, 57, 52, 41, 37, 49, 47, 48, 35, 32, 34, 52, 57, 62, 57, 70, 81, 81, 65, 69, 72, 64, 0]
+}`;
+
+const garminJsonData = `{
+  "summary_date": "2017-11-05",
+  "steps": 5000,
+  "sleep": 87,
+  "calories": 2000,
+  "heart_rate": 69,
+  "stress": "mild",
+  "body_composition": 70,
+  "pulse": 57,
+  "intensity_minutes": 23,
+  "activity_details": 99,
+  "body_battery": 88,
+  "respiration": 97,
+  "menstrual_cycle": 59
+}`;
+
+const bridgeJsonData = `{
+  "load": 6009,
+  "sets": 41,
+  "time": 70,
+  "heartRate": 70,
+  "Force": 69,
+  "difficultyPercentage": 67
+}`;
+
+const woopJsonData = `{
+  "updatedAt": "2017-11-05",
+  "sleepScore": 97,
+  "recovery": 65,
+  "restingHeartRate": 66,
+  "naps": 1,
+  "qualityDuration": 76,
+  "sleepConsistency": 2,
+  "maxHeartRate": 112,
+  "averageHeartRate": 88
+}`;
+
 export const DemoScreen = observer(function DemoScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  function stringToJson() {
+    var jsonObject = JSON.parse(ouraRingJsonData);
+    Alert.alert("" + jsonObject.total)
+  }
+
   const demoReactotron = React.useMemo(
     () => async () => {
-      console.tron.log("Your Friendly tron log message")
+      stringToJson();
+      console.log("Your Friendly tron log message")
       console.tron.logImportant("I am important")
       console.tron.display({
         name: "DISPLAY",
