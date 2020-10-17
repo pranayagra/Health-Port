@@ -2,5 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 34986
+  "packagerPid": 72414,
+  "webpackServerPort": 19006,
+  "expoServerNgrokUrl": "https://ek-qqi.anonymous.client.exp.direct",
+  "packagerNgrokUrl": "https://packager.ek-qqi.anonymous.client.exp.direct",
+  "ngrokPid": 72427
 }
