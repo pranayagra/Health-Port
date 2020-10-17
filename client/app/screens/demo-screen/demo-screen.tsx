@@ -153,6 +153,10 @@ export const DemoScreen = observer(function DemoScreen() {
             onPress={demoReactotron}
           />
           <Text style={HINT} tx={`demoScreen.${Platform.OS}ReactotronHint`} />
+          <Button
+            tx="welcomeScreen.continue"
+            onPress={() => navigation.navigate("test")}
+          />
         </View>
         <Image source={logoIgnite} style={IGNITE} />
         <View style={LOVE_WRAPPER}>
