@@ -128,6 +128,7 @@ const garminJsonData = `{
   "body_battery": 88,
   "respiration": 97,
   "menstrual_cycle": 59,
+  "steps": 5480,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
   "hydration_cups": [5, 7, 6, 7, 7, 8, 6]
 }`;
@@ -139,8 +140,7 @@ const bridgeJsonData = `{
   "rest_heart_rate_avg_week": [44.725, 45.500, 45.625, 45.425, 45.775, 45.725, 45.875],
   "force": 69,
   "stress": "high",
-  "difficultyPercentage": 67,
-  "sleep": 80
+  "difficultyPercentage": 67
 }`;
 
 const whoopJsonData = `{
