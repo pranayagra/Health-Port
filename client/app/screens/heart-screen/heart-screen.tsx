@@ -1,10 +1,19 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList } from "react-native"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions} from "react-native"
 import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
+import {LineChart} from 'react-native-chart-kit'
+
+const screenWidth = Dimensions.get('window').width
+
+var today = new Date();
+var todayDay = today.getDate();
+var todayMonth = "/" + (today.getMonth()+1);
+
+var isDailyView = false;
 
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
@@ -86,6 +95,15 @@ const whoopJsonData = JSON.parse(`{
   "pain": 2
 }`);
 
+const heartWeekScoreData = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.stress
+    }
+  ]
+}
+
 const FULL: ViewStyle = { flex: 1 }
 
 const CONTAINER: ViewStyle = {
@@ -138,6 +156,7 @@ export const HeartScreen = observer(function HeartScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  if (isDailyView) {
   return (
     <View style={FULL}>
       <Wallpaper />
@@ -176,4 +195,53 @@ export const HeartScreen = observer(function HeartScreen() {
     </View>
     
   )
+  } else {
+    return (
+    
+      <View style={FULL}>
+        <Wallpaper />
+        <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+          <Header
+            headerTx="demoScreen.howTo"
+            leftIcon="back"
+            onLeftPress={goBack}
+            style={HEADER}
+            titleStyle={HEADER_TITLE}
+          />
+  
+      <View>
+      <Text>Heart Score</Text>
+      <LineChart
+        data={heartWeekScoreData}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+  
+    </Screen>
+    </View>
+    )
+  }
 })

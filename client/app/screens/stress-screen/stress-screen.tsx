@@ -1,10 +1,19 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList } from "react-native"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions } from "react-native"
 import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
+import {LineChart} from 'react-native-chart-kit'
+
+const screenWidth = Dimensions.get('window').width
+
+var today = new Date();
+var todayDay = today.getDate();
+var todayMonth = "/" + (today.getMonth()+1);
+
+var isDailyView = false;
 
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
@@ -37,7 +46,7 @@ const ouraRingJsonData = JSON.parse(`{
   "rmssd": 54,
   "breath_average": 13,
   "temperature_delta": -0.06,
-  "stress": "average",
+  "stress": [32, 44, 13, 28, 35, 19, 37],
   "fatigue": "tired",
   "hypnogram_5min": "443432222211222333321112222222222111133333322221112233333333332232222334",
   "hr_5min": [0, 53, 51, 0, 50, 50, 49, 49, 50, 50, 51, 52, 52, 51, 53, 58, 60, 60, 59, 58, 58, 58, 58, 55, 55, 55, 55, 56, 56, 55, 53, 53, 53, 53, 53, 53, 57, 58, 60, 60, 59, 57, 59, 58, 56, 56, 56, 56, 55, 55, 56, 56, 57, 58, 55, 56, 57, 60, 58, 58, 59, 57, 54, 54, 53, 52, 52, 55, 53, 54, 56, 0],
@@ -86,6 +95,15 @@ const whoopJsonData = JSON.parse(`{
   "pain": 2
 }`);
 
+const stressWeekScoreData = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.stress
+    }
+  ]
+}
+
 const FULL: ViewStyle = { flex: 1 }
 
 const CONTAINER: ViewStyle = {
@@ -130,37 +148,123 @@ export const StressScreen = observer(function StressScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
-  return (
-    <View style={FULL}>
-      <Wallpaper />
-      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
-        <Header
-          headerTx="demoScreen.howTo"
-          leftIcon="back"
-          onLeftPress={goBack}
-          style={HEADER}
-          titleStyle={HEADER_TITLE}
-        />
-
-      <FlatList
-        data={[
-          {
-            key: stressData[0].id + ':' + stressData[0].title
-          },
-          {
-            key: stressData[1].id + ':' + stressData[1].title
-          },
-          {
-            key: stressData[2].id + ':' + stressData[2].title
-          },
-          {
-            key: stressData[3].id + ':' + stressData[3].title
-          }
-        ]}
-        renderItem={({item}) => <Text>{item.key}</Text>}
-      />
-      </Screen>
-    </View>
+  if (isDailyView) {
+    return (
     
-  )
+      <View style={FULL}>
+        <Wallpaper />
+        <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+          <Header
+            headerTx="demoScreen.howTo"
+            leftIcon="back"
+            onLeftPress={goBack}
+            style={HEADER}
+            titleStyle={HEADER_TITLE}
+          />
+  
+        <FlatList
+          data={[
+            {
+              key: stressData[0].id + ':' + stressData[0].title
+            },
+            {
+              key: stressData[1].id + ':' + stressData[1].title
+            },
+            {
+              key: stressData[2].id + ':' + stressData[2].title
+            },
+            {
+              key: stressData[3].id + ':' + stressData[3].title
+            }
+          ]}
+          renderItem={({item}) => <Text>{item.key}</Text>}
+        />
+  
+        </Screen>
+      </View>
+    )
+  } else {
+    return (
+    
+      <View style={FULL}>
+        <Wallpaper />
+        <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+          <Header
+            headerTx="demoScreen.howTo"
+            leftIcon="back"
+            onLeftPress={goBack}
+            style={HEADER}
+            titleStyle={HEADER_TITLE}
+          />
+  
+      <View>
+      <Text>Stress Score</Text>
+      <LineChart
+        data={stressWeekScoreData}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>Stress Score</Text>
+      <LineChart
+        data={stressWeekScoreData}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+    </View>
+  
+    </Screen>
+    </View>
+    )
+  }
+
 })
+
+
+
