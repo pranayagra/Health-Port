@@ -196,7 +196,7 @@ export const SleepScreen = observer(function SleepScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
-  const [isDailyView, setIsDailyView] = useState(false);
+  const [isDailyView, setIsDailyView] = useState(true);
 
   if (isDailyView) {
   return (
