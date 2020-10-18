@@ -64,7 +64,7 @@ const garminJsonData = JSON.parse(`{
   "intensity_minutes": 23,
   "activity_details": 99,
   "body_battery": 88,
-  "respiration": [97, 102, 88, 78, 121, 101, 110],
+  "respiration": [97, 96, 88, 78, 89, 94, 79],
   "menstrual_cycle": 59,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
   "hydration_cups": [5, 7, 6, 7, 7, 8, 6]
@@ -236,8 +236,8 @@ export const HeartScreen = observer(function HeartScreen() {
             titleStyle={HEADER_TITLE}
           />
   
-      <View>
-      <Text>HR Average</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Average</Text>
       <LineChart
         data={heartWeekScoreData_averageHeartRate}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -267,8 +267,8 @@ export const HeartScreen = observer(function HeartScreen() {
       />
       </View>
       
-      <View>
-      <Text>HR Minimum</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Minimum</Text>
       <LineChart
         data={heartWeekScoreData_hr_lowest}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -298,8 +298,8 @@ export const HeartScreen = observer(function HeartScreen() {
       />
       </View>
 
-      <View>
-      <Text>HR Maximum</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Maximum</Text>
       <LineChart
         data={heartWeekScoreData_hr_max}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -329,8 +329,8 @@ export const HeartScreen = observer(function HeartScreen() {
       />
       </View>
 
-      <View>
-      <Text>Respiration Score</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Respiration Score</Text>
       <LineChart
         data={heartWeekScoreData_respiration}
         width={Dimensions.get("window").width - 20} // from react-native

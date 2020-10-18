@@ -64,7 +64,7 @@ const garminJsonData = JSON.parse(`{
   "intensity_minutes": 23,
   "activity_details": 99,
   "body_battery": 88,
-  "respiration": 97,
+  "respiration": [97, 96, 88, 78, 89, 94, 79],
   "menstrual_cycle": 59,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
   "hydration_cups": [5, 7, 6, 7, 7, 8, 6]
@@ -159,7 +159,7 @@ const exerciseData = [
   },
   {
     id: 'Exercise Time',
-    title: bridgeJsonData.time[6],
+    title: (bridgeJsonData.time[6]/60).toFixed(0) + ' hr ' + (bridgeJsonData.time[6]%60) + ' min',
   },
   {
     id: 'Body Composition',
@@ -178,11 +178,11 @@ const exerciseData = [
     title: bridgeJsonData.sets,
   },
   {
-    id: 'Difficulty Score',
+    id: 'Difficulty Score (0 - 100)',
     title: bridgeJsonData.difficulty_score,
   },
   {
-    id: 'Force',
+    id: 'Force (0 - 100)',
     title: bridgeJsonData.force,
   }
 ];
@@ -249,40 +249,9 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-  
-      {/* <View>
-      <Text>Exercise Score</Text>
-      <LineChart
-        data={exerciseWeekScoreData}
-        width={Dimensions.get("window").width - 20} // from react-native
-        height={220}
-        fromZero
-        yAxisInterval={1}
-        chartConfig={{
-          backgroundColor: "#e26a00",
-          backgroundGradientFrom: "#fb8c00",
-          backgroundGradientTo: "#ffa726",
-          decimalPlaces: 1, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 5
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726"
-          }
-        }}
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      />
-      </View> */}
-
-      <View>
-      <Text>Calories Burnt</Text>
+      
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Calories Burnt</Text>
       <LineChart
         data={exerciseWeekScoreData_calories}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -312,8 +281,8 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
       />
       </View>
 
-      <View>
-      <Text># of Steps</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Number of Steps</Text>
       <LineChart
         data={exerciseWeekScoreData_steps}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -343,8 +312,8 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
       />
       </View>
 
-      <View>
-      <Text>Exercise Time</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Exercise Time (Minutes)</Text>
       <LineChart
         data={exerciseWeekScoreData_time}
         width={Dimensions.get("window").width - 20} // from react-native

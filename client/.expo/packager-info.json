@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://cy-wpk.anonymous.client.exp.direct",
+  "packagerNgrokUrl": "https://packager.cy-wpk.anonymous.client.exp.direct",
+  "ngrokPid": 14748,
   "devToolsPort": 19002,
-  "packagerPort": 19003,
-  "packagerPid": 4461
+  "packagerPort": 19001,
+  "packagerPid": 18284
 }

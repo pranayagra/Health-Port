@@ -14,7 +14,6 @@ var todayDay = today.getDate();
 var todayMonth = "/" + (today.getMonth()+1);
 
 var isDailyView = false;
-
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
   "period_id": 0,
@@ -214,8 +213,8 @@ export const StressScreen = observer(function StressScreen() {
             titleStyle={HEADER_TITLE}
           />
 
-      <View>
-      <Text>Stress Score</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Stress Score</Text>
       <LineChart
         data={stressWeekScoreData}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -245,8 +244,8 @@ export const StressScreen = observer(function StressScreen() {
       />
     </View>
 
-    <View>
-      <Text>Restless Score</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Restless Score</Text>
       <LineChart
         data={stressWeekScoreData_restless}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -276,8 +275,8 @@ export const StressScreen = observer(function StressScreen() {
       />
     </View>
 
-    <View>
-      <Text>Pain Score</Text>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Pain Score</Text>
       <LineChart
         data={stressWeekScoreData_pain}
         width={Dimensions.get("window").width - 20} // from react-native

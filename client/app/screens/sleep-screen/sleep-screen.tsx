@@ -1,11 +1,11 @@
-import React from "react"
+import React, {useState} from "react"
 import { observer } from "mobx-react-lite"
 import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions } from "react-native"
 import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import {LineChart} from 'react-native-chart-kit'
+import {LineChart, StackedBarChart} from 'react-native-chart-kit'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -13,15 +13,13 @@ var today = new Date();
 var todayDay = today.getDate();
 var todayMonth = "/" + (today.getMonth()+1);
 
-var isDailyView = false;
-
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
   "period_id": 0,
   "is_longest": 1,
   "timezone": 120,
-  "bedtime_start": "2017-11-06T01:13:19+02:00",
-  "bedtime_end": "2017-11-06T07:16:19+02:00",
+  "bedtime_start": "12:19",
+  "bedtime_end": "17:23",
   "score": 79,
   "score_week": [97, 76, 78, 95, 74, 80, 79],
   "score_total": 57,
@@ -63,7 +61,7 @@ const garminJsonData = JSON.parse(`{
   "pulse": 57,
   "intensity_minutes": 23,
   "activity_details": 99,
-  "body_battery": [88, 99, 77, 13, 54, 23, 54],
+  "body_battery": [88, 99, 24, 77, 54, 31, 54],
   "respiration": 97,
   "menstrual_cycle": 59,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
@@ -157,11 +155,11 @@ const HEADER_TITLE: TextStyle = {
 
 const sleepData = [
   {
-    id: 'Bedtime Start',
+    id: 'Bedtime Start (hr:min)',
     title: ouraRingJsonData.bedtime_start,
   },
   {
-    id: 'Bedtime End',
+    id: 'Bedtime End (hr:min)',
     title: ouraRingJsonData.bedtime_end,
   },
   {
@@ -177,7 +175,7 @@ const sleepData = [
     title: (ouraRingJsonData.deep[6]/60).toFixed(0) + ' hr ' + (ouraRingJsonData.deep[6]%60) + ' min',
   },
   {
-    id: 'Sleep Consistency Score',
+    id: 'Sleep Consistency Score (0 - 100)',
     title: whoopJsonData.sleep_consistency_score,
   },
   {
@@ -185,11 +183,11 @@ const sleepData = [
     title: whoopJsonData.naps,
   },
   {
-    id: 'Awake Score',
+    id: 'Awake Score (0 - 100)',
     title: ouraRingJsonData.awake_score,
   },
   {
-    id: 'Body Battery Score',
+    id: 'Body Battery Score (0 - 100)',
     title: garminJsonData.body_battery[6],
   },
 ];
@@ -198,13 +196,15 @@ export const SleepScreen = observer(function SleepScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  const [isDailyView, setIsDailyView] = useState(false);
+
   if (isDailyView) {
   return (
     <View style={FULL}>
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header
-          headerTx="demoScreen.howTo"
+          headerTx="sleepScreen.title"
           leftIcon="back"
           onLeftPress={goBack}
           style={HEADER}
@@ -259,9 +259,9 @@ export const SleepScreen = observer(function SleepScreen() {
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-  
-      <View>
-      <Text>Sleep Duration (Minutes)</Text>
+      
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 5}}>Sleep Duration (Minutes)</Text>
       <LineChart
         data={sleepWeekScoreData_sleep_duration}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -272,7 +272,7 @@ export const SleepScreen = observer(function SleepScreen() {
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
           backgroundGradientTo: "#ffa726",
-          decimalPlaces: 1, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {
@@ -291,8 +291,8 @@ export const SleepScreen = observer(function SleepScreen() {
       />
       </View>
 
-      <View>
-      <Text>REM Sleep (Minutes)</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>REM Sleep (Minutes)</Text>
       <LineChart
         data={sleepWeekScoreData_rem}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -303,7 +303,7 @@ export const SleepScreen = observer(function SleepScreen() {
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
           backgroundGradientTo: "#ffa726",
-          decimalPlaces: 1, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {
@@ -322,8 +322,8 @@ export const SleepScreen = observer(function SleepScreen() {
       />
       </View>
 
-      <View>
-      <Text>Deep Sleep (Minutes)</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Deep Sleep (Minutes)</Text>
       <LineChart
         data={sleepWeekScoreData_deep}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -334,7 +334,7 @@ export const SleepScreen = observer(function SleepScreen() {
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
           backgroundGradientTo: "#ffa726",
-          decimalPlaces: 1, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {
@@ -353,8 +353,8 @@ export const SleepScreen = observer(function SleepScreen() {
       />
       </View>
 
-      <View>
-      <Text>Body Battery Score</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Body Battery Score (0 - 100)</Text>
       <LineChart
         data={sleepWeekScoreData_body_battery}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -365,7 +365,7 @@ export const SleepScreen = observer(function SleepScreen() {
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
           backgroundGradientTo: "#ffa726",
-          decimalPlaces: 1, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {

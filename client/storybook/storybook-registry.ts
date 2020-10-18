@@ -1,3 +1,4 @@
+require("../app/components/stat-card/stat-card.story")
 require("../app/components/card/card.story")
 require("../app/components/text/text.story")
 require("../app/components/button/button.story")
