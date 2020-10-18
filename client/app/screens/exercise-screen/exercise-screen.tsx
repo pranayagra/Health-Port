@@ -107,10 +107,10 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 }
 
-const sleepData = [
+const exerciseData = [
   {
-    id: 'total',
-    title: 20310,
+    id: 'calories',
+    title: JSON.parse(ouraRingJsonData).calories,
   },
   {
     id: 'duration',
@@ -179,10 +179,10 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
       <FlatList
         data={[
           {
-            key: sleepData[0].id + ':' + sleepData[0].title
+            key: exerciseData[0].id + ':' + exerciseData[0].title
           },
           {
-            key: sleepData[1].id + ':' + sleepData[1].title
+            key: exerciseData[1].id + ':' + exerciseData[1].title
           },
         ]}
         renderItem={({item}) => <Text>{item.key}</Text>}
