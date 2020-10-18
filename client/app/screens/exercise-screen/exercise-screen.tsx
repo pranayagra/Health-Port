@@ -110,7 +110,7 @@ const HEADER_TITLE: TextStyle = {
 const exerciseData = [
   {
     id: 'Calories Burnt',
-    title: ouraRingJsonData.calories,
+    title: garminJsonData.calories,
   },
   {
     id: 'Exercise Time',
