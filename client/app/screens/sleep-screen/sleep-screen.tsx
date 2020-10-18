@@ -109,39 +109,39 @@ const HEADER_TITLE: TextStyle = {
 
 const sleepData = [
   {
-    id: 'bedtime_start',
+    id: 'Bedtime Start',
     title: ouraRingJsonData.bedtime_start,
   },
   {
-    id: 'bedtime_end',
+    id: 'Bedtime End',
     title: ouraRingJsonData.bedtime_end,
   },
   {
-    id: 'sleep duration',
+    id: 'Sleep Duration',
     title: (ouraRingJsonData.sleep_duration/60).toFixed(0) + ' hr ' + (ouraRingJsonData.sleep_duration % 60) + ' min',
   },
   {
-    id: 'rem',
+    id: 'Rem Sleep',
     title: (ouraRingJsonData.rem/60).toFixed(0) + ' hr ' + (ouraRingJsonData.rem % 60) + ' min',
   },
   {
-    id: 'deep',
+    id: 'Deep Sleep',
     title: (ouraRingJsonData.deep/60).toFixed(0) + ' hr ' + (ouraRingJsonData.deep % 60) + ' min',
   },
   {
-    id: 'sleep consistency score',
+    id: 'Sleep Consistency Score',
     title: whoopJsonData.sleep_consistency_score,
   },
   {
-    id: 'number of naps',
+    id: '# of Naps',
     title: whoopJsonData.naps,
   },
   {
-    id: 'awake score',
+    id: 'Awake Score',
     title: ouraRingJsonData.awake_score,
   },
   {
-    id: 'body_battery',
+    id: 'Body Battery Score',
     title: garminJsonData.body_battery,
   },
 ];

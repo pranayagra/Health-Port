@@ -113,7 +113,7 @@ const stressData = [
     title: ouraRingJsonData.fatigue,
   },
   {
-    id: 'Restless',
+    id: 'Restless Score',
     title: ouraRingJsonData.restless,
   },
   {
