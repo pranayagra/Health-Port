@@ -5,7 +5,7 @@ import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import {LineChart} from 'react-native-chart-kit'
+import {LineChart, BarChart} from 'react-native-chart-kit'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -56,7 +56,7 @@ const ouraRingJsonData = JSON.parse(`{
 const garminJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
   "sleep": 87,
-  "calories": 2000,
+  "calories": [600, 750, 1250, 530, 500, 1150, 1030],
   "rest_hr_average_week": [44.525, 46.225, 45.650, 45.625, 45.750, 45.750, 46.575],
   "stress": "mild",
   "body_composition": 70,
@@ -73,7 +73,7 @@ const garminJsonData = JSON.parse(`{
 const bridgeJsonData = JSON.parse(`{
   "load": 6009,
   "sets": 41,
-  "time": 70,
+  "time": [70, 95, 130, 60, 50, 120, 120],
   "rest_heart_rate_avg_week": [44.725, 45.500, 45.625, 45.425, 45.775, 45.725, 45.875],
   "force": 69,
   "stress": "high",
@@ -99,7 +99,34 @@ const exerciseWeekScoreData = {
   labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
   datasets: [
     {
-      data: ouraRingJsonData.stress
+      data: ouraRingJsonData.stress //TODO FIX
+    }
+  ]
+}
+
+const exerciseWeekScoreData_calories = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: garminJsonData.calories
+    }
+  ]
+}
+
+const exerciseWeekScoreData_steps = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: garminJsonData.steps_week
+    }
+  ]
+}
+
+const exerciseWeekScoreData_time = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: bridgeJsonData.time
     }
   ]
 }
@@ -128,11 +155,11 @@ const HEADER_TITLE: TextStyle = {
 const exerciseData = [
   {
     id: 'Calories Burnt',
-    title: garminJsonData.calories,
+    title: garminJsonData.calories[6],
   },
   {
     id: 'Exercise Time',
-    title: bridgeJsonData.time,
+    title: bridgeJsonData.time[6],
   },
   {
     id: 'Body Composition',
@@ -223,7 +250,7 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
             titleStyle={HEADER_TITLE}
           />
   
-      <View>
+      {/* <View>
       <Text>Exercise Score</Text>
       <LineChart
         data={exerciseWeekScoreData}
@@ -236,6 +263,99 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
           backgroundGradientFrom: "#fb8c00",
           backgroundGradientTo: "#ffa726",
           decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View> */}
+
+      <View>
+      <Text>Calories Burnt</Text>
+      <LineChart
+        data={exerciseWeekScoreData_calories}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 0, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text># of Steps</Text>
+      <LineChart
+        data={exerciseWeekScoreData_steps}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 0, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>Exercise Time</Text>
+      <LineChart
+        data={exerciseWeekScoreData_time}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {

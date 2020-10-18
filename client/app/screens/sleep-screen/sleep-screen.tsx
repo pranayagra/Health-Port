@@ -32,11 +32,11 @@ const ouraRingJsonData = JSON.parse(`{
   "score_deep": 59,
   "score_alignment": 31,
   "total": 20310,
-  "sleep_duration": 443,
+  "sleep_duration": [443, 534, 212, 422, 554, 324, 534],
   "awake_score": 96,
   "light": 10260,
-  "rem": 123,
-  "deep": 108,
+  "rem": [123, 132, 102, 153, 244, 125, 143],
+  "deep": [108, 99, 121, 134, 102, 112, 123],
   "onset_latency": 480,
   "restless": 39,
   "efficiency": 94,
@@ -63,7 +63,7 @@ const garminJsonData = JSON.parse(`{
   "pulse": 57,
   "intensity_minutes": 23,
   "activity_details": 99,
-  "body_battery": 88,
+  "body_battery": [88, 99, 77, 13, 54, 23, 54],
   "respiration": 97,
   "menstrual_cycle": 59,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
@@ -95,14 +95,44 @@ const whoopJsonData = JSON.parse(`{
   "pain": 2
 }`);
 
-const sleepWeekScoreData = {
+const sleepWeekScoreData_sleep_duration = {
   labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
   datasets: [
     {
-      data: ouraRingJsonData.stress
+      data: ouraRingJsonData.sleep_duration
     }
   ]
 }
+
+const sleepWeekScoreData_rem = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.rem
+    }
+  ]
+}
+
+const sleepWeekScoreData_deep = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.deep
+    }
+  ]
+}
+
+const sleepWeekScoreData_body_battery = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: garminJsonData.body_battery
+    }
+  ]
+}
+
+//add bedtime_start and bedtime_end maybe on same graph
+// how do dat... yeah ill do it later maybe
 
 const FULL: ViewStyle = { flex: 1 }
 
@@ -136,15 +166,15 @@ const sleepData = [
   },
   {
     id: 'Sleep Duration',
-    title: (ouraRingJsonData.sleep_duration/60).toFixed(0) + ' hr ' + (ouraRingJsonData.sleep_duration % 60) + ' min',
+    title: (ouraRingJsonData.sleep_duration[6]/60).toFixed(0) + ' hr ' + (ouraRingJsonData.sleep_duration[6]%60) + ' min',
   },
   {
-    id: 'Rem Sleep',
-    title: (ouraRingJsonData.rem/60).toFixed(0) + ' hr ' + (ouraRingJsonData.rem % 60) + ' min',
+    id: 'REM Sleep',
+    title: (ouraRingJsonData.rem[6]/60).toFixed(0) + ' hr ' + (ouraRingJsonData.rem[6]%60) + ' min',
   },
   {
     id: 'Deep Sleep',
-    title: (ouraRingJsonData.deep/60).toFixed(0) + ' hr ' + (ouraRingJsonData.deep % 60) + ' min',
+    title: (ouraRingJsonData.deep[6]/60).toFixed(0) + ' hr ' + (ouraRingJsonData.deep[6]%60) + ' min',
   },
   {
     id: 'Sleep Consistency Score',
@@ -160,7 +190,7 @@ const sleepData = [
   },
   {
     id: 'Body Battery Score',
-    title: garminJsonData.body_battery,
+    title: garminJsonData.body_battery[6],
   },
 ];
 
@@ -231,9 +261,102 @@ export const SleepScreen = observer(function SleepScreen() {
           />
   
       <View>
-      <Text>Sleep Score</Text>
+      <Text>Sleep Duration (Minutes)</Text>
       <LineChart
-        data={sleepWeekScoreData}
+        data={sleepWeekScoreData_sleep_duration}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>REM Sleep (Minutes)</Text>
+      <LineChart
+        data={sleepWeekScoreData_rem}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>Deep Sleep (Minutes)</Text>
+      <LineChart
+        data={sleepWeekScoreData_deep}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>Body Battery Score</Text>
+      <LineChart
+        data={sleepWeekScoreData_body_battery}
         width={Dimensions.get("window").width - 20} // from react-native
         height={220}
         fromZero

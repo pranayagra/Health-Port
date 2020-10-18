@@ -5,7 +5,7 @@ import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
-import {LineChart} from 'react-native-chart-kit'
+import {LineChart, BarChart} from 'react-native-chart-kit'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -38,7 +38,7 @@ const ouraRingJsonData = JSON.parse(`{
   "rem": 123,
   "deep": 108,
   "onset_latency": 480,
-  "restless": 39,
+  "restless": [39, 56, 74, 46, 76, 89, 32],
   "efficiency": 94,
   "midpoint_time": 11010,
   "hr_lowest": 44.275,
@@ -92,7 +92,7 @@ const whoopJsonData = JSON.parse(`{
   "maxHeartRate": 112.750,
   "stress": "very low",
   "averageHeartRate": 88,
-  "pain": 2
+  "pain": [4, 6, 3, 7, 7, 7, 3]
 }`);
 
 const stressWeekScoreData = {
@@ -100,6 +100,24 @@ const stressWeekScoreData = {
   datasets: [
     {
       data: ouraRingJsonData.stress
+    }
+  ]
+}
+
+const stressWeekScoreData_restless = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.restless
+    }
+  ]
+}
+
+const stressWeekScoreData_pain = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: whoopJsonData.pain
     }
   ]
 }
@@ -132,11 +150,11 @@ const stressData = [
   },
   {
     id: 'Restless Score',
-    title: ouraRingJsonData.restless,
+    title: ouraRingJsonData.restless[6],
   },
   {
     id: 'Pain',
-    title: whoopJsonData.pain,
+    title: whoopJsonData.pain[6],
   },
   {
     id: 'Menstrual Cycle',
@@ -185,7 +203,6 @@ export const StressScreen = observer(function StressScreen() {
     )
   } else {
     return (
-    
       <View style={FULL}>
         <Wallpaper />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
@@ -196,7 +213,7 @@ export const StressScreen = observer(function StressScreen() {
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-  
+
       <View>
       <Text>Stress Score</Text>
       <LineChart
@@ -226,12 +243,43 @@ export const StressScreen = observer(function StressScreen() {
           borderRadius: 16
         }}
       />
-      </View>
+    </View>
 
-      <View>
-      <Text>Stress Score</Text>
+    <View>
+      <Text>Restless Score</Text>
       <LineChart
-        data={stressWeekScoreData}
+        data={stressWeekScoreData_restless}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+    </View>
+
+    <View>
+      <Text>Pain Score</Text>
+      <LineChart
+        data={stressWeekScoreData_pain}
         width={Dimensions.get("window").width - 20} // from react-native
         height={220}
         fromZero

@@ -41,7 +41,7 @@ const ouraRingJsonData = JSON.parse(`{
   "restless": 39,
   "efficiency": 94,
   "midpoint_time": 11010,
-  "hr_lowest": 44.275,
+  "hr_lowest": [41.23, 40.34, 50.45, 56.34, 40.75, 40.00, 43.56],
   "rest_hr_average_week": [45.375, 47.525, 47.450, 45.625, 44.750, 45.275, 46.225],
   "rmssd": 54,
   "breath_average": 13,
@@ -64,7 +64,7 @@ const garminJsonData = JSON.parse(`{
   "intensity_minutes": 23,
   "activity_details": 99,
   "body_battery": 88,
-  "respiration": 97,
+  "respiration": [97, 102, 88, 78, 121, 101, 110],
   "menstrual_cycle": 59,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
   "hydration_cups": [5, 7, 6, 7, 7, 8, 6]
@@ -89,17 +89,44 @@ const whoopJsonData = JSON.parse(`{
   "naps": 1,
   "qualityDuration": 76,
   "sleep_consistency_score": 84,
-  "maxHeartRate": 112.750,
+  "maxHeartRate": [112.750, 102.43, 154.34, 131.23, 122.45, 132.67, 102.54],
   "stress": "very low",
-  "averageHeartRate": 88,
+  "averageHeartRate": [88, 67, 76, 78, 67, 87, 88],
   "pain": 2
 }`);
 
-const heartWeekScoreData = {
+const heartWeekScoreData_averageHeartRate = {
   labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
   datasets: [
     {
-      data: ouraRingJsonData.stress
+      data: whoopJsonData.averageHeartRate
+    }
+  ]
+}
+
+const heartWeekScoreData_respiration = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: garminJsonData.respiration
+    }
+  ]
+}
+
+const heartWeekScoreData_hr_lowest = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: ouraRingJsonData.hr_lowest
+    }
+  ]
+}
+
+const heartWeekScoreData_hr_max = {
+  labels: [(todayDay-6) + todayMonth, (todayDay-5) + todayMonth, (todayDay-4) + todayMonth, (todayDay-3) + todayMonth, (todayDay-2) + todayMonth, (todayDay-1) + todayMonth, todayDay + todayMonth],
+  datasets: [
+    {
+      data: whoopJsonData.maxHeartRate
     }
   ]
 }
@@ -128,15 +155,15 @@ const HEADER_TITLE: TextStyle = {
 const heartData = [
   {
     id: 'HR Minimum',
-    title: ouraRingJsonData.hr_lowest,
+    title: ouraRingJsonData.hr_lowest[6],
   },
   {
     id: 'HR Maximum',
-    title: whoopJsonData.maxHeartRate,
+    title: whoopJsonData.maxHeartRate[6],
   },
   {
     id: 'HR Average',
-    title: whoopJsonData.averageHeartRate,
+    title: whoopJsonData.averageHeartRate[6],
   },
   {
     id: 'HR Resting',
@@ -144,7 +171,7 @@ const heartData = [
   },
   {
     id: 'Respiration Score',
-    title: garminJsonData.respiration,
+    title: garminJsonData.respiration[6],
   },
   {
     id: 'Breath Average',
@@ -210,9 +237,102 @@ export const HeartScreen = observer(function HeartScreen() {
           />
   
       <View>
-      <Text>Heart Score</Text>
+      <Text>HR Average</Text>
       <LineChart
-        data={heartWeekScoreData}
+        data={heartWeekScoreData_averageHeartRate}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+      
+      <View>
+      <Text>HR Minimum</Text>
+      <LineChart
+        data={heartWeekScoreData_hr_lowest}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>HR Maximum</Text>
+      <LineChart
+        data={heartWeekScoreData_hr_max}
+        width={Dimensions.get("window").width - 20} // from react-native
+        height={220}
+        fromZero
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 1, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 5
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          }
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
+      />
+      </View>
+
+      <View>
+      <Text>Respiration Score</Text>
+      <LineChart
+        data={heartWeekScoreData_respiration}
         width={Dimensions.get("window").width - 20} // from react-native
         height={220}
         fromZero
