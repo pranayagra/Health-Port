@@ -10,7 +10,8 @@
   "welcomeScreen": {
     "poweredBy": "POWERED BY BOWSER",
     "readyForLaunch": "Ready for launch.",
-    "continue": "CONTINUE"
+    "continue": "CONTINUE",
+    "title": "HEALTHPORT"
   },
   "demoScreen": {
     "howTo": "HOW TO",
