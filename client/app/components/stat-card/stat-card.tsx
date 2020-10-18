@@ -6,6 +6,7 @@ import { Text } from "../"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
+  display: "flex",
 }
 
 const TEXT: TextStyle = {

@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions } from "react-native"
-import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions, Switch } from "react-native"
+import { Screen, Text, Header, Wallpaper, BulletItem, StatCard, Button} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -153,6 +153,14 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 }
 
+const CARDS_FORMAT: ViewStyle = {
+  display: "flex",
+  flex: 1,
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between"
+}
+
 const sleepData = [
   {
     id: 'Bedtime Start (hr:min)',
@@ -179,7 +187,7 @@ const sleepData = [
     title: whoopJsonData.sleep_consistency_score,
   },
   {
-    id: '# of Naps',
+    id: 'Number of Naps',
     title: whoopJsonData.naps,
   },
   {
@@ -210,38 +218,23 @@ export const SleepScreen = observer(function SleepScreen() {
           style={HEADER}
           titleStyle={HEADER_TITLE}
         />
-      <FlatList
-        data={[
-          {
-            key: sleepData[0].id + ':\t' + sleepData[0].title
-          },
-          {
-            key: sleepData[1].id + ':\t' + sleepData[1].title
-          },
-          {
-            key: sleepData[2].id + ':\t' + sleepData[2].title
-          },
-          {
-            key: sleepData[3].id + ':\t' + sleepData[3].title
-          },
-          {
-            key: sleepData[4].id + ':\t' + sleepData[4].title
-          },
-          {
-            key: sleepData[5].id + ':\t' + sleepData[5].title
-          },
-          {
-            key: sleepData[6].id + ':\t' + sleepData[6].title
-          },
-          {
-            key: sleepData[7].id + ':\t' + sleepData[7].title
-          },
-          {
-            key: sleepData[8].id + ':\t' + sleepData[8].title
-          }
-        ]}
-        renderItem={({item}) => <Text>{item.key}</Text>}
-      />
+        <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
+        <View style={CARDS_FORMAT}>
+          {sleepData.map(data => {
+            return (
+              <StatCard 
+                title={data.id} 
+                value={data.title}
+                style={{
+                  margin: 20,
+                }}
+              />
+            )
+          })}
+        </View>
       </Screen>
     </View>
     
@@ -253,12 +246,17 @@ export const SleepScreen = observer(function SleepScreen() {
         <Wallpaper />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header
-            headerTx="demoScreen.howTo"
+            headerTx="sleepScreen.title"
             leftIcon="back"
             onLeftPress={goBack}
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
+        
+        <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
       
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 5}}>Sleep Duration (Minutes)</Text>
