@@ -234,6 +234,10 @@ export const DemoScreen = observer(function DemoScreen() {
             tx="welcomeScreen.continue"
             onPress={() => navigation.navigate("test")}
           />
+          <Button
+            tx="welcomeScreen.continue"
+            onPress={() => navigation.navigate("sleep")}
+          />
         </View>
         <Image source={logoIgnite} style={IGNITE} />
         <View style={LOVE_WRAPPER}>
