@@ -64,7 +64,7 @@ export const TestScreen = observer(function TestScreen() {
           compliment if you’re doing well"
         />
         <Card
-          title="Work"
+          title="Heart"
           score={80}
           style={{marginTop: 5, marginBottom: 5}}
           imageBackground="splash.png"
@@ -72,23 +72,7 @@ export const TestScreen = observer(function TestScreen() {
           compliment if you’re doing well"
         />
         <Card
-          title="Sneak"
-          score={100}
-          style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
-        />
-        <Card
-          title="Sneak"
-          score={100}
-          style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
-        />
-        <Card
-          title="Sneak"
+          title="Stress"
           score={100}
           style={{marginTop: 5, marginBottom: 5}}
           imageBackground="splash.png"

@@ -158,7 +158,7 @@ const sleepData = [
   },
 ];
 
-export const SleepScreen = observer(function SleepScreen() {
+export const HeartScreen = observer(function HeartScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
