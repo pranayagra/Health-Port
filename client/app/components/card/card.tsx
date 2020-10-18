@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite"
 import { color, typography } from "../../theme"
 import { Text } from "../"
 import { Icon } from "../icon/icon"
+import { TouchableOpacity } from "react-native-gesture-handler"
 // import { Card, ListItem, Button, Icon } from 'react-native-elements'
 // import SegmentedRoundDisplay from 'react-native-segmented-round-display';
 
@@ -31,9 +32,16 @@ const IMGBKG: ImageStyle = {
 
 const SCORE_CONTAINER: ViewStyle = {
   width: '100%',
+  // height: '100%',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
+}
+
+const ICON: ImageStyle = {
+  maxHeight: 64,
+  maxWidth: 64,
+  marginRight: '25%',
 }
 
 const TEXT: TextStyle = {
@@ -50,15 +58,48 @@ export interface CardProps {
    * An optional style override useful for padding & margin.
    */
   style?: ViewStyle,
-  suggestion?: string,
-  imageBackground: string
+  imageBackground: string,
+  iconName?: string,
+  onPress?: () => any,
+}
+
+// doing this stupid thing because the require method
+// doesn't work with formatted strings ughaksjfgnlsaknsdng
+function cardBackground(name) {
+  if (name === "galaxy") {
+    return require('../../../assets/galaxy.png')
+  } else if (name === "gym") {
+    return require('../../../assets/gym.png')
+  } else if (name === "forest") {
+    return require('../../../assets/forest.png')
+  } else if (name === "food") {
+    return require('../../../assets/food.png')
+  } else {
+    return require('../../../assets/desert.png')
+  }
+}
+
+// same thing here ughaosdlsakdjgn
+function generateIcon(iconName) {
+  if (iconName === "bed") {
+    return require("../icon/icons/bed.png")
+  } else if (iconName === "heart") {
+    return require("../icon/icons/heart.png")
+  } else if (iconName === "stress") {
+    return require("../icon/icons/stress.png")
+  } else if (iconName === "weights") {
+    return require("../icon/icons/weights.png")
+  } else {
+    return require("../icon/icons/arrow-left.png")
+  }
 }
 
 /**
  * Describe your component here
  */
 export const Card = observer(function Card(props: CardProps) {
-  const { title, score, style, suggestion, imageBackground } = props
+  const { title, score, style, imageBackground, iconName, onPress } = props
+
 
   const arcProps = {
     // displayValue: true,
@@ -77,22 +118,24 @@ export const Card = observer(function Card(props: CardProps) {
   }
 
   return (
-    <View style={[CONTAINER, style]}>
-      <ImageBackground 
-      source={require(`../../../assets/desert.png`)} 
-      style={IMGBKG}
-      imageStyle={{ borderRadius: 15 }}>
-        <Text style={[TEXT, {marginBottom: 20, fontSize: 20}]}>{title}</Text>
-        <View style={SCORE_CONTAINER}>
-          <View style={{display: "flex", alignContent: "center", justifyContent: "center"}}>
-            <Icon icon="bullet"/>
+    <TouchableOpacity onPress={onPress}>
+      <View style={[CONTAINER, style]}>
+        <ImageBackground 
+        source={cardBackground(imageBackground)} 
+        style={IMGBKG}
+        imageStyle={{ borderRadius: 15 }}>
+          <Text style={[TEXT, {marginBottom: 20, fontSize: 24}]}>{title}</Text>
+          <View style={SCORE_CONTAINER}>
+            <View style={{display: "flex", alignContent: "center", justifyContent: "center"}}>
+              <Image source={generateIcon(iconName)} style={ICON}/>
+            </View>
+            <Text style={[TEXT, {marginBottom: 20, fontSize: 50}]}>{score}</Text>
+            {/* <SegmentedRoundDisplay {...arcProps}/> */}
           </View>
-          <Text style={[TEXT, {marginBottom: 20, fontSize: 50}]}>{score}</Text>
-          {/* <SegmentedRoundDisplay {...arcProps}/> */}
-        </View>
-        
-        {/* <Text style={[TEXT, {marginBottom: 20, fontSize: 14}]}>{suggestion}</Text> */}
-      </ImageBackground>
-    </View>
+          
+          {/* <Text style={[TEXT, {marginBottom: 20, fontSize: 14}]}>{suggestion}</Text> */}
+        </ImageBackground>
+      </View>
+    </TouchableOpacity>
   )
 })

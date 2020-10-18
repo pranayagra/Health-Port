@@ -5,8 +5,8 @@ export const initFonts = async () => {
   // ...
   // Welcome back! Just uncomment this and replace/append with your font file names!
   // ⬇
-  // await Font.loadAsync({
-  //   Montserrat: require("./Montserrat-Regular.ttf"),
-  //   "Montserrat-Regular": require("./Montserrat-Regular.ttf"),
-  // })
+  await Font.loadAsync({
+    Quicksand: require("./Quicksand-VariableFont_wght.ttf"),
+    // "Montserrat-Regular": require("./Montserrat-Regular.ttf"),
+  })
 }

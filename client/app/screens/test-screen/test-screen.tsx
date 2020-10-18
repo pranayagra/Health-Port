@@ -51,33 +51,30 @@ export const TestScreen = observer(function TestScreen() {
           title="Sleep"
           score={100}
           style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
+          imageBackground="galaxy"
+          iconName="bed"
+          onPress={() => {navigation.navigate("demo")}}
         />
         <Card
           title="Exercise"
           score={80}
           style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
-        />
-        <Card
-          title="Heart"
-          score={80}
-          style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
+          imageBackground="gym"
+          iconName="weights"
         />
         <Card
           title="Stress"
-          score={100}
+          score={80}
           style={{marginTop: 5, marginBottom: 5}}
-          imageBackground="splash.png"
-          suggestion="Here is a suggestion for you to improve, or a 
-          compliment if you’re doing well"
+          imageBackground="forest"
+          iconName="stress"
+        />
+        <Card
+          title="Heart Health"
+          score={100}
+          style={{marginTop: 5, marginBottom: 10}}
+          imageBackground="food"
+          iconName="heart"
         />
       </Screen>
     </View>
