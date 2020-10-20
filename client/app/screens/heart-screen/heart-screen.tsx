@@ -1,7 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions} from "react-native"
-import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions, Switch} from "react-native"
+import { Screen, Text, Header, Wallpaper, BulletItem, StatCard} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -12,8 +12,6 @@ const screenWidth = Dimensions.get('window').width
 var today = new Date();
 var todayDay = today.getDate();
 var todayMonth = "/" + (today.getMonth()+1);
-
-var isDailyView = false;
 
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
@@ -44,7 +42,7 @@ const ouraRingJsonData = JSON.parse(`{
   "hr_lowest": [41.23, 40.34, 50.45, 56.34, 40.75, 40.00, 43.56],
   "rest_hr_average_week": [45.375, 47.525, 47.450, 45.625, 44.750, 45.275, 46.225],
   "rmssd": 54,
-  "breath_average": 13,
+  "breath_average": 16,
   "temperature_delta": -0.06,
   "stress": "average",
   "fatigue": "tired",
@@ -152,29 +150,37 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 }
 
+const CARDS_FORMAT: ViewStyle = {
+  display: "flex",
+  flex: 1,
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between"
+}
+
 const heartData = [
   {
-    id: 'HR Minimum',
+    id: 'HR Minimum (BPM)',
     title: ouraRingJsonData.hr_lowest[6],
   },
   {
-    id: 'HR Maximum',
+    id: 'HR Maximum (BPM)',
     title: whoopJsonData.maxHeartRate[6],
   },
   {
-    id: 'HR Average',
+    id: 'HR Average (BPM)',
     title: whoopJsonData.averageHeartRate[6],
   },
   {
-    id: 'HR Resting',
+    id: 'HR Resting (BPM)',
     title: garminJsonData.rest_hr_average_week[6],
   },
   {
-    id: 'Respiration Score',
+    id: 'Respiration Score (0 - 100)',
     title: garminJsonData.respiration[6],
   },
   {
-    id: 'Breath Average',
+    id: 'Breaths Per Minute',
     title: ouraRingJsonData.breath_average,
   }
 ];
@@ -183,41 +189,37 @@ export const HeartScreen = observer(function HeartScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  const [isDailyView, setIsDailyView] = useState(true);
+
   if (isDailyView) {
   return (
     <View style={FULL}>
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header
-          headerTx="demoScreen.howTo"
+          headerTx="heartScreen.title"
           leftIcon="back"
           onLeftPress={goBack}
           style={HEADER}
           titleStyle={HEADER_TITLE}
         />
-      <FlatList
-        data={[
-          {
-            key: heartData[0].id + ':\t' + heartData[0].title
-          },
-          {
-            key: heartData[1].id + ':\t' + heartData[1].title
-          },
-          {
-            key: heartData[2].id + ':\t' + heartData[2].title
-          },
-          {
-            key: heartData[3].id + ':\t' + heartData[3].title
-          },
-          {
-            key: heartData[4].id + ':\t' + heartData[4].title
-          },
-          {
-            key: heartData[5].id + ':\t' + heartData[5].title
-          }
-        ]}
-        renderItem={({item}) => <Text>{item.key}</Text>}
-      />
+      <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
+        <View style={CARDS_FORMAT}>
+          {heartData.map(data => {
+            return (
+              <StatCard 
+                title={data.id} 
+                value={data.title}
+                style={{
+                  margin: 20,
+                }}
+              />
+            )
+          })}
+        </View>
       </Screen>
     </View>
     
@@ -229,15 +231,19 @@ export const HeartScreen = observer(function HeartScreen() {
         <Wallpaper />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header
-            headerTx="demoScreen.howTo"
+            headerTx="heartScreen.title"
             leftIcon="back"
             onLeftPress={goBack}
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
+          <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
   
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Average</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Average (BPM)</Text>
       <LineChart
         data={heartWeekScoreData_averageHeartRate}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -268,7 +274,7 @@ export const HeartScreen = observer(function HeartScreen() {
       </View>
       
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Minimum</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Minimum (BPM)</Text>
       <LineChart
         data={heartWeekScoreData_hr_lowest}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -299,7 +305,7 @@ export const HeartScreen = observer(function HeartScreen() {
       </View>
 
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Maximum</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>HR Maximum (BPM)</Text>
       <LineChart
         data={heartWeekScoreData_hr_max}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -330,7 +336,7 @@ export const HeartScreen = observer(function HeartScreen() {
       </View>
 
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Respiration Score</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Respiration Score (0 - 100)</Text>
       <LineChart
         data={heartWeekScoreData_respiration}
         width={Dimensions.get("window").width - 20} // from react-native

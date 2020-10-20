@@ -1,7 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions } from "react-native"
-import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions, Switch } from "react-native"
+import { Screen, Text, Header, Wallpaper, BulletItem, StatCard} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -13,7 +13,6 @@ var today = new Date();
 var todayDay = today.getDate();
 var todayMonth = "/" + (today.getMonth()+1);
 
-var isDailyView = false;
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
   "period_id": 0,
@@ -64,7 +63,7 @@ const garminJsonData = JSON.parse(`{
   "activity_details": 99,
   "body_battery": 88,
   "respiration": 97,
-  "menstrual_cycle": 59,
+  "menstrual_cycle": 28,
   "steps_week": [7020, 5650, 10380, 10560, 9280, 4080, 5480],
   "hydration_cups": [5, 7, 6, 7, 7, 8, 6]
 }`);
@@ -91,7 +90,7 @@ const whoopJsonData = JSON.parse(`{
   "maxHeartRate": 112.750,
   "stress": "very low",
   "averageHeartRate": 88,
-  "pain": [4, 6, 3, 7, 7, 7, 3]
+  "pain": [14, 26, 13, 37, 41, 27, 13]
 }`);
 
 const stressWeekScoreData = {
@@ -142,21 +141,29 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 }
 
+const CARDS_FORMAT: ViewStyle = {
+  display: "flex",
+  flex: 1,
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between"
+}
+
 const stressData = [
   {
     id: 'Fatigue',
     title: ouraRingJsonData.fatigue,
   },
   {
-    id: 'Restless Score',
+    id: 'Restless Score (0 - 100)',
     title: ouraRingJsonData.restless[6],
   },
   {
-    id: 'Pain',
+    id: 'Pain (0 - 100)',
     title: whoopJsonData.pain[6],
   },
   {
-    id: 'Menstrual Cycle',
+    id: 'Menstrual Cycle (Days)',
     title: garminJsonData.menstrual_cycle,
   }
 ];
@@ -165,6 +172,8 @@ export const StressScreen = observer(function StressScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  const [isDailyView, setIsDailyView] = useState(true);
+
   if (isDailyView) {
     return (
     
@@ -172,30 +181,29 @@ export const StressScreen = observer(function StressScreen() {
         <Wallpaper />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header
-            headerTx="demoScreen.howTo"
+            headerTx="stressScreen.title"
             leftIcon="back"
             onLeftPress={goBack}
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
-  
-        <FlatList
-          data={[
-            {
-              key: stressData[0].id + ':' + stressData[0].title
-            },
-            {
-              key: stressData[1].id + ':' + stressData[1].title
-            },
-            {
-              key: stressData[2].id + ':' + stressData[2].title
-            },
-            {
-              key: stressData[3].id + ':' + stressData[3].title
-            }
-          ]}
-          renderItem={({item}) => <Text>{item.key}</Text>}
+        <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
         />
+        <View style={CARDS_FORMAT}>
+          {stressData.map(data => {
+            return (
+              <StatCard 
+                title={data.id} 
+                value={data.title}
+                style={{
+                  margin: 20,
+                }}
+              />
+            )
+          })}
+        </View>
   
         </Screen>
       </View>
@@ -206,15 +214,19 @@ export const StressScreen = observer(function StressScreen() {
         <Wallpaper />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header
-            headerTx="demoScreen.howTo"
+            headerTx="stressScreen.title"
             leftIcon="back"
             onLeftPress={goBack}
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
+          <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
 
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Stress Score</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Stress Score (0 - 100)</Text>
       <LineChart
         data={stressWeekScoreData}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -245,7 +257,7 @@ export const StressScreen = observer(function StressScreen() {
     </View>
 
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Restless Score</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Restless Score (0 - 100)</Text>
       <LineChart
         data={stressWeekScoreData_restless}
         width={Dimensions.get("window").width - 20} // from react-native
@@ -276,7 +288,7 @@ export const StressScreen = observer(function StressScreen() {
     </View>
 
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Pain Score</Text>
+      <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Pain Score (0 - 100)</Text>
       <LineChart
         data={stressWeekScoreData_pain}
         width={Dimensions.get("window").width - 20} // from react-native

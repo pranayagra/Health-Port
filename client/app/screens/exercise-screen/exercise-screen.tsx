@@ -1,7 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import { observer } from "mobx-react-lite"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions } from "react-native"
-import { Screen, Text, Header, Wallpaper, BulletItem} from "../../components"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView, FlatList, Dimensions, Switch } from "react-native"
+import { Screen, Text, Header, Wallpaper, BulletItem, StatCard} from "../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -12,8 +12,6 @@ const screenWidth = Dimensions.get('window').width
 var today = new Date();
 var todayDay = today.getDate();
 var todayMonth = "/" + (today.getMonth()+1);
-
-var isDailyView = false;
 
 const ouraRingJsonData = JSON.parse(`{
   "summary_date": "2017-11-05",
@@ -152,6 +150,14 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 }
 
+const CARDS_FORMAT: ViewStyle = {
+  display: "flex",
+  flex: 1,
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between"
+}
+
 const exerciseData = [
   {
     id: 'Calories Burnt',
@@ -166,7 +172,7 @@ const exerciseData = [
     title: garminJsonData.body_composition,
   },
   {
-    id: '# of Steps',
+    id: 'Number of Steps',
     title: garminJsonData.steps_week[6],
   },
   {
@@ -174,7 +180,7 @@ const exerciseData = [
     title: bridgeJsonData.load + ' lb',
   },
   {
-    id: '# of Sets',
+    id: 'Number of Sets',
     title: bridgeJsonData.sets,
   },
   {
@@ -191,48 +197,37 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
 
+  const [isDailyView, setIsDailyView] = useState(true);
+
   if (isDailyView) {
   return (
     <View style={FULL}>
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header
-          headerTx="demoScreen.howTo"
+          headerTx="exerciseScreen.title"
           leftIcon="back"
           onLeftPress={goBack}
           style={HEADER}
           titleStyle={HEADER_TITLE}
         />
-
-      <FlatList
-        data={[
-          {
-            key: exerciseData[0].id + ':\t' + exerciseData[0].title
-          },
-          {
-            key: exerciseData[1].id + ':\t' + exerciseData[1].title
-          },
-          {
-            key: exerciseData[2].id + ':\t' + exerciseData[2].title
-          },
-          {
-            key: exerciseData[3].id + ':\t' + exerciseData[3].title
-          },
-          {
-            key: exerciseData[4].id + ':\t' + exerciseData[4].title
-          },
-          {
-            key: exerciseData[5].id + ':\t' + exerciseData[5].title
-          },
-          {
-            key: exerciseData[6].id + ':\t' + exerciseData[6].title
-          },
-          {
-            key: exerciseData[7].id + ':\t' + exerciseData[7].title
-          },
-        ]}
-        renderItem={({item}) => <Text>{item.key}</Text>}
-      />
+        <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
+        <View style={CARDS_FORMAT}>
+          {exerciseData.map(data => {
+            return (
+              <StatCard 
+                title={data.id} 
+                value={data.title}
+                style={{
+                  margin: 20,
+                }}
+              />
+            )
+          })}
+        </View>
       </Screen>
     </View>
     
@@ -249,6 +244,10 @@ export const ExerciseScreen = observer(function ExerciseScreen() {
             style={HEADER}
             titleStyle={HEADER_TITLE}
           />
+        <Switch
+          onValueChange={() => setIsDailyView(!isDailyView)}
+          value={isDailyView}
+        />
       
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{color: '#888', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Calories Burnt</Text>
